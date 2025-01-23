@@ -7,7 +7,7 @@ namespace CookBook.Database;
 public class CookBookDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
-    public DbSet<Recipe> Recipes { get; set; }
+    public DbSet<RecipeModel> Recipes { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
     
     public CookBookDbContext(
@@ -22,7 +22,7 @@ public class CookBookDbContext : DbContext
             .HasKey(ri => new { ri.RecipeId, ri.IngredientId });
         
         modelBuilder.Entity<RecipeIngredient>()
-            .HasOne(ri => ri.Recipe)
+            .HasOne(ri => ri.RecipeModel)
             .WithMany(r => r.RecipeIngredients)
             .HasForeignKey(ri => ri.RecipeId);
 

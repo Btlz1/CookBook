@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CookBook.Database;
 
-public class RecipeConfiguration : IEntityTypeConfiguration<Recipe>
+public class RecipeConfiguration : IEntityTypeConfiguration<RecipeModel>
 {
-    public void Configure(EntityTypeBuilder<Recipe> builder)
+    public void Configure(EntityTypeBuilder<RecipeModel> builder)
     {
         builder.HasKey(note => note.Id);
         builder.Property(user => user.Name).HasMaxLength(128);

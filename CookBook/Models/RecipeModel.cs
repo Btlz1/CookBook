@@ -1,6 +1,6 @@
 namespace CookBook.Models;
 
-public class Recipe
+public class RecipeModel
 {
     public int Id { get;}
     public string Name { get; set; } = null!;

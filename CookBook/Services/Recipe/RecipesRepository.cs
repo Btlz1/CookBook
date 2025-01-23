@@ -3,8 +3,8 @@ using CookBook.Abstractions;
 using CookBook.Contracts;
 using CookBook.Database;
 using CookBook.Exceptions;
+using CookBook.Models;
 using Microsoft.EntityFrameworkCore;
-using Recipe = CookBook.Models.Recipe;
 
 
 namespace CookBook.Services;
@@ -29,11 +29,11 @@ public class RecipesRepository : IRecipeRepository
         return listOfRecipes;
     }
     
-    public async Task<Models.Recipe> AddRecipe(Models.Recipe dto)
+    public async Task<RecipeModel> AddRecipe(RecipeModel dto)
     {
         var token = new CancellationTokenSource(5000).Token;
         
-        var  note = _mapper.Map<Models.Recipe>(dto);
+        var  note = _mapper.Map<RecipeModel>(dto);
         await _dbContext.Recipes.AddAsync(note, token);
         await _dbContext.SaveChangesAsync(token);
         return note;
@@ -44,7 +44,7 @@ public class RecipesRepository : IRecipeRepository
         var token = new CancellationTokenSource(5000).Token;
         
         var recipe = TryGetRecipeByIdAndThrowIfNotFound(id);
-        var updatedRecipe = _mapper.Map<(int, UpdateRecipeDto), Models.Recipe>((id, dto));
+        var updatedRecipe = _mapper.Map<(int, UpdateRecipeDto), RecipeModel>((id, dto));
         recipe.Name = updatedRecipe.Name; 
         recipe.Description = updatedRecipe.Description; 
         recipe.Finished = true;
@@ -62,7 +62,7 @@ public class RecipesRepository : IRecipeRepository
         await _dbContext.SaveChangesAsync(token);
     }
     
-    private Models.Recipe TryGetRecipeByIdAndThrowIfNotFound(int id)
+    private RecipeModel TryGetRecipeByIdAndThrowIfNotFound(int id)
     {
         var recipe = _dbContext.Recipes.FirstOrDefault(n => n.Id == id);
         if (recipe is null)

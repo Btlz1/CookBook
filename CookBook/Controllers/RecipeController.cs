@@ -20,13 +20,13 @@ public class RecipeController : BaseController
 
     [HttpGet]
     [Authorize(Policy = "RecipeOwner")]
-    public async Task<ActionResult<Recipe>> GetRecipes(int userId) 
+    public async Task<ActionResult<RecipeModel>> GetRecipes(int userId) 
         => Ok(await _recipeRepository.GetRecipes(userId));
     
     [HttpPost]
-    public async Task<ActionResult<Recipe>> AddRecipe(CreateRecipeDto dto)
+    public async Task<ActionResult<RecipeModel>> AddRecipe(CreateRecipeDto dto)
     {
-        Recipe recipe = new()
+        RecipeModel recipeModel = new()
         {
             Name = dto.Name,
             Description = dto.Description,
@@ -40,8 +40,8 @@ public class RecipeController : BaseController
                 Unit = ingredientDto.Unit
             }).ToList()
         };
-        await _recipeRepository.AddRecipe(recipe);
-        return  Ok(recipe);
+        await _recipeRepository.AddRecipe(recipeModel);
+        return  Ok(recipeModel);
     }
     
     [HttpPut("{id}")]

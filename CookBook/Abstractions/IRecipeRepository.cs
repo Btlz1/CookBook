@@ -6,7 +6,7 @@ namespace CookBook.Abstractions;
 public interface IRecipeRepository
 {
     Task<List<RecipeVm>> GetRecipes(int userId);
-    Task<Recipe> AddRecipe(Recipe dto);
+    Task<RecipeModel> AddRecipe(RecipeModel dto);
     Task<int> UpdateRecipe(int id, UpdateRecipeDto dto);
     Task DeleteRecipe(int id);
 }
