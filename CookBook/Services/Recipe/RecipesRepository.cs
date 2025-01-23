@@ -4,6 +4,7 @@ using CookBook.Contracts;
 using CookBook.Database;
 using CookBook.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Recipe = CookBook.Models.Recipe;
 
 
 namespace CookBook.Services;
@@ -43,8 +44,10 @@ public class RecipesRepository : IRecipeRepository
         var token = new CancellationTokenSource(5000).Token;
         
         var recipe = TryGetRecipeByIdAndThrowIfNotFound(id);
-        var updatedNote = _mapper.Map<(int, UpdateRecipeDto), Models.Recipe>((id, dto));
-        recipe.Name = updatedNote.Name; recipe.Description = updatedNote.Description; recipe.Finished = true;
+        var updatedRecipe = _mapper.Map<(int, UpdateRecipeDto), Models.Recipe>((id, dto));
+        recipe.Name = updatedRecipe.Name; 
+        recipe.Description = updatedRecipe.Description; 
+        recipe.Finished = true;
         recipe.EditDate = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync(token);
         return recipe.Id;

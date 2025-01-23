@@ -27,6 +27,14 @@ public class ExceptionHandler : IExceptionHandler
             await httpContext.Response.WriteAsync(recipeNotFoundException.Message);
             return true;
         }
+        if (exception is IngredientNotFoundException ingredientNotFoundException)
+        {
+            httpContext.Response.ContentType = MediaTypeNames.Text.Plain;
+            httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            await httpContext.Response.WriteAsync(ingredientNotFoundException.Message);
+            return true;
+        }
+        
         httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         await httpContext.Response.WriteAsync(string.Empty);
         return false;

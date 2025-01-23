@@ -39,6 +39,7 @@ public static class Composer
         services.AddExceptionHandler<ExceptionHandler>();
         services.AddRecipesRepository();
         services.AddUserRepository();
+        services.AddIngredientRepository();
         return services;
     }
 }

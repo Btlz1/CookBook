@@ -13,13 +13,22 @@ public class RecipesMappingProfile : Profile
             .ForMember(dest => dest.Name, 
                 opt => opt.MapFrom(src => src.Name.Trim()))
             .ForMember(dest => dest.Description, 
-                opt => opt.MapFrom(src => src.Description.Trim()));
-        
-        CreateMap<(int ReciepId, UpdateRecipeDto RecipeDto), Recipe>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RecipeDto))
+                opt => opt.MapFrom(src => src.Description.Trim()))
+            .ForMember(dest => dest.RecipeIngredients, 
+                opt => opt.MapFrom(src => src.Ingredients));
+
+       CreateMap<(int RecipeId, UpdateRecipeDto RecipeDto), Recipe>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RecipeId))
             .ForMember(dest => dest.Name, 
                 opt => opt.MapFrom(src => src.RecipeDto.Name.Trim()))
             .ForMember(dest => dest.Description, 
                 opt => opt.MapFrom(src => src.RecipeDto.Description.Trim()));
+       
+        CreateMap<IngredientVm, RecipeIngredient>()
+            .ForMember(dest => dest.IngredientId, opt => opt.MapFrom(src => src.IngredientId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Unit))
+            .ForMember(dest => dest.Recipe, opt => opt.Ignore()) // Игнорируем связь с Recipe
+            .ForMember(dest => dest.Ingredient, opt => opt.Ignore()); // Игнорируем связь с Ingredient
     }
 }

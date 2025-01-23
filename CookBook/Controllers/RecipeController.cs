@@ -33,6 +33,12 @@ public class RecipeController : BaseController
             Finished = false,
             DateCreated = DateTime.UtcNow,
             UserId = HttpContext.ExtractUserIdFromClaims()!.Value,
+            RecipeIngredients = dto.Ingredients.Select(ingredientDto => new RecipeIngredient
+            {
+                IngredientId = ingredientDto.IngredientId, 
+                Quantity = ingredientDto.Quantity,
+                Unit = ingredientDto.Unit
+            }).ToList()
         };
         await _recipeRepository.AddRecipe(recipe);
         return  Ok(recipe);

@@ -10,5 +10,5 @@ public class Recipe
     public bool? Finished { get; set; } 
     public int UserId { get; set; }
     public int RevievId { get; set; }
-    
+    public ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
 }
