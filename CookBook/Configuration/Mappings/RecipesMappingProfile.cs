@@ -22,13 +22,14 @@ public class RecipesMappingProfile : Profile
             .ForMember(dest => dest.Name, 
                 opt => opt.MapFrom(src => src.RecipeDto.Name.Trim()))
             .ForMember(dest => dest.Description, 
-                opt => opt.MapFrom(src => src.RecipeDto.Description.Trim()));
-       
-        CreateMap<IngredientVm, RecipeIngredient>()
-            .ForMember(dest => dest.IngredientId, opt => opt.MapFrom(src => src.IngredientId))
-            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
-            .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Unit))
-            .ForMember(dest => dest.RecipeModel, opt => opt.Ignore()) // Игнорируем связь с Recipe
-            .ForMember(dest => dest.Ingredient, opt => opt.Ignore()); // Игнорируем связь с Ingredient
+                opt => opt.MapFrom(src => src.RecipeDto.Description.Trim()))
+            .ForMember(dest => dest.RecipeIngredients, 
+                opt => opt.MapFrom(src => src.RecipeDto.Ingredients));
+
+       CreateMap<IngredientVm, RecipeIngredient>()
+           .ForMember(dest => dest.IngredientId, opt => opt.MapFrom(src => src.IngredientId))
+           .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+           .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Unit));
+
     }
 }

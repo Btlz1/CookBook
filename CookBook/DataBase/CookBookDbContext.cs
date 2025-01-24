@@ -9,6 +9,7 @@ public class CookBookDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<RecipeModel> Recipes { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
+    public DbSet<RecipeIngredient> RecipeIngredient { get; set; }
     
     public CookBookDbContext(
         DbContextOptions<CookBookDbContext> options) 

@@ -13,9 +13,11 @@ public class RecipesRepository : IRecipeRepository
 {
     private readonly CookBookDbContext _dbContext;
     private readonly IMapper _mapper;
-    private readonly IUserRepository _userRepository;
-    public RecipesRepository(CookBookDbContext dbContext, IMapper mapper, IUserRepository userRepository)
-        => (_dbContext, _mapper, _userRepository) = (dbContext, mapper, userRepository);
+    
+    
+    
+    public RecipesRepository(CookBookDbContext dbContext, IMapper mapper)
+        => (_dbContext, _mapper) = (dbContext, mapper);
 
     public async Task<List<RecipeVm>> GetRecipes(int userId)
     {
@@ -33,10 +35,10 @@ public class RecipesRepository : IRecipeRepository
     {
         var token = new CancellationTokenSource(5000).Token;
         
-        var  note = _mapper.Map<RecipeModel>(dto);
-        await _dbContext.Recipes.AddAsync(note, token);
+        var  recipe = _mapper.Map<RecipeModel>(dto);
+        await _dbContext.Recipes.AddAsync(recipe, token);
         await _dbContext.SaveChangesAsync(token);
-        return note;
+        return recipe;
     }
 
     public async Task<int> UpdateRecipe(int id, UpdateRecipeDto dto)
@@ -46,10 +48,16 @@ public class RecipesRepository : IRecipeRepository
         var recipe = TryGetRecipeByIdAndThrowIfNotFound(id);
         var updatedRecipe = _mapper.Map<(int, UpdateRecipeDto), RecipeModel>((id, dto));
         recipe.Name = updatedRecipe.Name; 
-        recipe.Description = updatedRecipe.Description; 
+        recipe.Description = updatedRecipe.Description;
         recipe.Finished = true;
         recipe.EditDate = DateTime.UtcNow;
+        foreach (var ingredientDto in dto.Ingredients)
+        {
+            await UpdateIngredient(ingredientDto.IngredientId, id, ingredientDto);
+        }
+        
         await _dbContext.SaveChangesAsync(token);
+        
         return recipe.Id;
     }
  
@@ -70,5 +78,22 @@ public class RecipesRepository : IRecipeRepository
             throw new RecipeNotFoundException(id);
         }
         return recipe;
+    }
+    
+    private async Task UpdateIngredient(int ingredientId, int recipeId, IngredientVm dto)
+    {
+        var token = new CancellationTokenSource(5000).Token;
+        var ingredient = await _dbContext.RecipeIngredient
+            .FirstOrDefaultAsync(i => i.IngredientId == ingredientId && i.RecipeId == recipeId, token);
+
+        if (ingredient == null)
+        {
+            throw new KeyNotFoundException($"Ingredient with id {ingredientId} not found.");
+        }
+        
+        ingredient.Quantity = dto.Quantity;
+        ingredient.Unit = dto.Unit.Trim();
+        
+        await _dbContext.SaveChangesAsync(token);
     }
 }
