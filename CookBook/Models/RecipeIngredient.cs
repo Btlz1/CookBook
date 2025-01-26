@@ -2,7 +2,7 @@ namespace CookBook.Models;
 
 public class RecipeIngredient
 {
-    public int RecipeId { get; set; }
+    public int Id { get; set; }
     public RecipeModel RecipeModel { get; set; }
 
     public int IngredientId { get; set; }

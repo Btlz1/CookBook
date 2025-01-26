@@ -21,7 +21,7 @@ public class IngredientsController : BaseController
 
     [HttpGet]
     [Route("api/ListOfIngredients")]
-    public async Task<ActionResult<List<Ingredient>>> GetAllIngredients()
+    public async Task<ActionResult<List<IngredientRC>>> GetAllIngredients()
     {
         var ingredients = await _ingredientRepository.GetAllIngredients();
         return Ok(ingredients);
@@ -29,18 +29,14 @@ public class IngredientsController : BaseController
     
     [HttpGet]
     [Route("api/IngredientsInRecipe")]
-    public async Task<ActionResult<Ingredient>> GetIngredientsByRecipe(int recipeId) 
+    public async Task<ActionResult<IngredientRC>> GetIngredientsByRecipe(int recipeId) 
         => Ok(await _ingredientRepository.GetIngredientsByRecipe(recipeId));
     
     [HttpPost]
     public async Task<ActionResult<Ingredient>> AddIngredient(IngredientRC dto)
     {
-        Ingredient ingredient = new()
-        {
-            Name = dto.Name
-        };
-        await _ingredientRepository.AddIngredient(ingredient);
-        return  Ok(ingredient);
+        await _ingredientRepository.AddIngredient(dto);
+        return  Ok(dto);
     }
     
     [HttpDelete("{id}")]

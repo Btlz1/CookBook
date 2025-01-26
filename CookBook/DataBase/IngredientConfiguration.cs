@@ -8,7 +8,7 @@ public class IngredientConfiguration : IEntityTypeConfiguration<Ingredient>
 {
     public void Configure(EntityTypeBuilder<Ingredient> builder)
     {
-        builder.HasKey(note => note.IngredientId);
-        builder.Property(user => user.Name).HasMaxLength(128);
+        builder.HasKey(ingredient => ingredient.Id);
+        builder.Property(ingredient => ingredient.Name).HasMaxLength(128);
     }
 }

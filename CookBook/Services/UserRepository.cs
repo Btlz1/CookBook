@@ -79,6 +79,7 @@ public class UserRepository : IUserRepository
         _dbContext.Users.Remove(user);
         await _dbContext.SaveChangesAsync(token);
     }
+    
     public async Task<User> LoginUser(string login,[FromBody] string password)
     {
         var token = new CancellationTokenSource(5000).Token;

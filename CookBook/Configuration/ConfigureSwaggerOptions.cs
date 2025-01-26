@@ -10,14 +10,14 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     public void Configure(SwaggerGenOptions options)
     {
         options.AddSecurityDefinition(
-            "Bearer", // Тип токена
-            new OpenApiSecurityScheme // Схема для передачи токена в сваггере
+            "Bearer", 
+            new OpenApiSecurityScheme 
             {
-                In = ParameterLocation.Header, // Где будем передавать токен
+                In = ParameterLocation.Header, 
                 Description = "Please enter a valid token",
-                Name = "Authorization", // Имя для заголовка
+                Name = "Authorization", 
                 Type = SecuritySchemeType.Http,
-                BearerFormat = "JWT", // Формат для Bearer токена
+                BearerFormat = "JWT", 
                 Scheme = JwtBearerDefaults.AuthenticationScheme
             });
         options.AddSecurityRequirement(

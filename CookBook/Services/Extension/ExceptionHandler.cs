@@ -34,6 +34,13 @@ public class ExceptionHandler : IExceptionHandler
             await httpContext.Response.WriteAsync(ingredientNotFoundException.Message);
             return true;
         }
+        if (exception is RecipeNotFoundException reviewNotFoundException)
+        {
+            httpContext.Response.ContentType = MediaTypeNames.Text.Plain;
+            httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            await httpContext.Response.WriteAsync(reviewNotFoundException.Message);
+            return true;
+        }
         
         httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         await httpContext.Response.WriteAsync(string.Empty);

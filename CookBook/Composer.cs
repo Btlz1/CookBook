@@ -2,6 +2,7 @@ using System.Reflection;
 using CookBook.Configuration.DataBase;
 using CookBook.Database;
 using CookBook.Services;
+using CookBook.Services.Extension;
 using CookBook.Services.Recipe;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -40,6 +41,7 @@ public static class Composer
         services.AddRecipesRepository();
         services.AddUserRepository();
         services.AddIngredientRepository();
+        services.AddReviewRepository();
         return services;
     }
 }

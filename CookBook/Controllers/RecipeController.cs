@@ -20,29 +20,13 @@ public class RecipeController : BaseController
 
     [HttpGet]
     [Authorize(Policy = "RecipeOwner")]
-    public async Task<ActionResult<RecipeModel>> GetRecipes(int userId) 
+    public async Task<ActionResult<RecipeModel>> GetRecipes(int userId)
         => Ok(await _recipeRepository.GetRecipes(userId));
-    
+
     [HttpPost]
-    public async Task<ActionResult<RecipeModel>> AddRecipe(CreateRecipeDto dto)
-    {
-        RecipeModel recipeModel = new()
-        {
-            Name = dto.Name,
-            Description = dto.Description,
-            Finished = false,
-            DateCreated = DateTime.UtcNow,
-            UserId = HttpContext.ExtractUserIdFromClaims()!.Value,
-            RecipeIngredients = dto.Ingredients.Select(ingredientDto => new RecipeIngredient
-            {
-                IngredientId = ingredientDto.IngredientId, 
-                Quantity = ingredientDto.Quantity,
-                Unit = ingredientDto.Unit
-            }).ToList()
-        };
-        await _recipeRepository.AddRecipe(recipeModel);
-        return  Ok(recipeModel);
-    }
+    public async Task<ActionResult<RecipeVm>> AddRecipe(CreateRecipeDto dto, int userId)
+        => Ok(await _recipeRepository.AddRecipe(dto, userId));
+    
     
     [HttpPut("{id}")]
     [Authorize(Policy = "RecipeOwner")]

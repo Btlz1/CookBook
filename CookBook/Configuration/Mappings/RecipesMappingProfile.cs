@@ -10,13 +10,13 @@ public class RecipesMappingProfile : Profile
     {
         CreateMap<CreateRecipeDto, RecipeModel>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Name, 
+            .ForMember(dest => dest.Name,
                 opt => opt.MapFrom(src => src.Name.Trim()))
-            .ForMember(dest => dest.Description, 
+            .ForMember(dest => dest.Description,
                 opt => opt.MapFrom(src => src.Description.Trim()))
-            .ForMember(dest => dest.RecipeIngredients, 
+            .ForMember(dest => dest.RecipeIngredients,
                 opt => opt.MapFrom(src => src.Ingredients));
-
+        
        CreateMap<(int RecipeId, UpdateRecipeDto RecipeDto), RecipeModel>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RecipeId))
             .ForMember(dest => dest.Name, 

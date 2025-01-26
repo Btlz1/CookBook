@@ -1,13 +1,10 @@
-using System.Runtime.InteropServices.JavaScript;
 using AutoMapper;
 using CookBook.Abstractions;
 using CookBook.Contracts;
 using CookBook.Database;
 using CookBook.Exceptions;
 using CookBook.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace CookBook.Services;
 
@@ -26,10 +23,9 @@ public class IngredientRepository : IIngredientPepository
         
         var ingredientsList = await _dbContext.Ingredients
             .Where(ingredient => ingredient.RecipeIngredients
-                .Any(ri => ri.RecipeId == recipeId)) 
+                .Any(ri => ri.Id == recipeId)) 
             .ToListAsync(token);
         
-
         return ingredientsList;
     }
 
@@ -43,7 +39,7 @@ public class IngredientRepository : IIngredientPepository
         return listOfIngredients;
     }
     
-    public async Task<Ingredient> AddIngredient(Ingredient dto)
+    public async Task<Ingredient> AddIngredient(IngredientRC dto)
     {
         var token = new CancellationTokenSource(5000).Token;
         
@@ -64,7 +60,7 @@ public class IngredientRepository : IIngredientPepository
     
     private Ingredient TryGetIngredientByIdAndThrowIfNotFound(int id)
     {
-        var ingredient = _dbContext.Ingredients.FirstOrDefault(n => n.IngredientId == id);
+        var ingredient = _dbContext.Ingredients.FirstOrDefault(n => n.Id == id);
         if (ingredient is null)
         {
             throw new IngredientNotFoundException(id);
