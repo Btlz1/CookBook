@@ -13,7 +13,6 @@ public class IngredientRepository : IIngredientPepository
     private readonly CookBookDbContext _dbContext;
     private readonly IMapper _mapper;
     
-    
     public IngredientRepository(CookBookDbContext dbContext, IMapper mapper)
         => (_dbContext, _mapper ) = (dbContext, mapper);
 

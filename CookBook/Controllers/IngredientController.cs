@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using CookBook.Abstractions;
 using CookBook.Contracts;
-using CookBook.Exceptions;
 using CookBook.Models;
 using Microsoft.AspNetCore.Authorization;
-
 
 namespace CookBook.Controllers;
 
@@ -22,10 +20,7 @@ public class IngredientsController : BaseController
     [HttpGet]
     [Route("api/ListOfIngredients")]
     public async Task<ActionResult<List<IngredientRC>>> GetAllIngredients()
-    {
-        var ingredients = await _ingredientRepository.GetAllIngredients();
-        return Ok(ingredients);
-    }
+       => Ok( await _ingredientRepository.GetAllIngredients());
     
     [HttpGet]
     [Route("api/IngredientsInRecipe")]
@@ -34,10 +29,7 @@ public class IngredientsController : BaseController
     
     [HttpPost]
     public async Task<ActionResult<Ingredient>> AddIngredient(IngredientRC dto)
-    {
-        await _ingredientRepository.AddIngredient(dto);
-        return  Ok(dto);
-    }
+        => Ok(await _ingredientRepository.AddIngredient(dto));
     
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteIngredient(int id)

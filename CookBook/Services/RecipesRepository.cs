@@ -3,7 +3,6 @@ using CookBook.Abstractions;
 using CookBook.Contracts;
 using CookBook.Database;
 using CookBook.Exceptions;
-using CookBook.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CookBook.Services;
@@ -28,11 +27,11 @@ public class RecipesRepository : IRecipeRepository
         return listOfRecipes;
     }
     
-    public async Task<RecipeModel> AddRecipe(CreateRecipeDto dto, int userId)
+    public async Task<Models.Recipe> AddRecipe(CreateRecipeDto dto, int userId)
     {
         var token = new CancellationTokenSource(5000).Token;
         
-        var  recipe = _mapper.Map<RecipeModel>(dto);
+        var  recipe = _mapper.Map<Models.Recipe>(dto);
         recipe.UserId = userId;
         recipe.DateCreated = DateTime.UtcNow;
         recipe.Finished = false;
@@ -46,7 +45,7 @@ public class RecipesRepository : IRecipeRepository
         var token = new CancellationTokenSource(5000).Token;
         
         var recipe = TryGetRecipeByIdAndThrowIfNotFound(id);
-        var updatedRecipe = _mapper.Map<(int, UpdateRecipeDto), RecipeModel>((id, dto));
+        var updatedRecipe = _mapper.Map<(int, UpdateRecipeDto), Models.Recipe>((id, dto));
         recipe.Name = updatedRecipe.Name; 
         recipe.Description = updatedRecipe.Description;
         recipe.Finished = true;
@@ -70,7 +69,7 @@ public class RecipesRepository : IRecipeRepository
         await _dbContext.SaveChangesAsync(token);
     }
     
-    private RecipeModel TryGetRecipeByIdAndThrowIfNotFound(int id)
+    private Models.Recipe TryGetRecipeByIdAndThrowIfNotFound(int id)
     {
         var recipe = _dbContext.Recipes.FirstOrDefault(n => n.Id == id);
         if (recipe is null)

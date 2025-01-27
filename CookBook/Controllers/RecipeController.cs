@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CookBook.Abstractions;
 using CookBook.Contracts;
-using CookBook.Exceptions;
 using CookBook.Models;
 using Microsoft.AspNetCore.Authorization;
 
@@ -20,13 +19,12 @@ public class RecipeController : BaseController
 
     [HttpGet]
     [Authorize(Policy = "RecipeOwner")]
-    public async Task<ActionResult<RecipeModel>> GetRecipes(int userId)
+    public async Task<ActionResult<Recipe>> GetRecipes(int userId)
         => Ok(await _recipeRepository.GetRecipes(userId));
 
     [HttpPost]
     public async Task<ActionResult<RecipeVm>> AddRecipe(CreateRecipeDto dto, int userId)
         => Ok(await _recipeRepository.AddRecipe(dto, userId));
-    
     
     [HttpPut("{id}")]
     [Authorize(Policy = "RecipeOwner")]

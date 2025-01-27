@@ -8,7 +8,7 @@ public class RecipesMappingProfile : Profile
 {
     public RecipesMappingProfile()
     {
-        CreateMap<CreateRecipeDto, RecipeModel>()
+        CreateMap<CreateRecipeDto, Recipe>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Name,
                 opt => opt.MapFrom(src => src.Name.Trim()))
@@ -17,7 +17,7 @@ public class RecipesMappingProfile : Profile
             .ForMember(dest => dest.RecipeIngredients,
                 opt => opt.MapFrom(src => src.Ingredients));
         
-       CreateMap<(int RecipeId, UpdateRecipeDto RecipeDto), RecipeModel>()
+       CreateMap<(int RecipeId, UpdateRecipeDto RecipeDto), Recipe>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RecipeId))
             .ForMember(dest => dest.Name, 
                 opt => opt.MapFrom(src => src.RecipeDto.Name.Trim()))
