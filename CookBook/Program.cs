@@ -1,9 +1,15 @@
-using CookBook.Composer;
-
+using CookBook.Models;
+using CookBook.Settings;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCustomServices(builder.Configuration);
+builder.Services
+    .AddFluentValidationAutoValidation() 
+    .AddFluentValidationClientsideAdapters();
 
+builder.Services
+    .AddCustomServices(builder.Configuration);
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

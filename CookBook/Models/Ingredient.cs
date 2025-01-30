@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace CookBook.Models;
 
 public class Ingredient
@@ -7,3 +9,4 @@ public class Ingredient
         public ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
         
 }
+

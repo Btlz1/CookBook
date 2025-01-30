@@ -1,11 +1,15 @@
 using System.Reflection;
 using CookBook.Configuration.DataBase;
 using CookBook.Database;
+using CookBook.Models;
 using CookBook.Services;
 using CookBook.Services.Extension;
 using CookBook.Services.Recipe;
+using CookBook.Settings;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 
 namespace CookBook.Composer;
@@ -16,6 +20,8 @@ public static class Composer
         this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddFluentValidationAutoValidation();
         services.Configure<CookBookDbConnectionSettings>(
             configuration.GetRequiredSection(nameof(CookBookDbConnectionSettings)));
         services.AddDbContext<CookBookDbContext>(options =>
@@ -42,6 +48,8 @@ public static class Composer
         services.AddUserRepository();
         services.AddIngredientRepository();
         services.AddReviewRepository();
+        
         return services;
     }
+    
 }

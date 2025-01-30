@@ -18,17 +18,25 @@ public class CookBookDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
+        modelBuilder.Entity<Recipe>()
+            .HasKey(r => r.Id);
+        
         modelBuilder.Entity<Recipe>()
             .HasOne(r => r.User)
-            .WithMany() 
+            .WithMany()
             .HasForeignKey(r => r.UserId)
-            .OnDelete(DeleteBehavior.Cascade); 
+            .OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<RecipeIngredient>()
             .HasKey(ri => new { RecipeId = ri.Id, ri.IngredientId });
-        
+
+        // RecipeIngredient (Composite Key and Relations)
+        modelBuilder.Entity<RecipeIngredient>()
+            .HasKey(ri => new { ri.Id, ri.IngredientId });
+
         modelBuilder.Entity<RecipeIngredient>()
             .HasOne(ri => ri.Recipe)
             .WithMany(r => r.RecipeIngredients)
@@ -38,11 +46,15 @@ public class CookBookDbContext : DbContext
             .HasOne(ri => ri.Ingredient)
             .WithMany(i => i.RecipeIngredients)
             .HasForeignKey(ri => ri.IngredientId);
-        
+
+        // Review -> Recipe
         modelBuilder.Entity<Review>()
-            .HasOne(o => o.Recipe)          
-            .WithMany(u => u.Revievs)       
-            .HasForeignKey(o => o.RecipeId);
+            .HasOne(r => r.Recipe)
+            .WithMany(r => r.Reviews) // Исправлено имя коллекции
+            .HasForeignKey(r => r.RecipeId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        base.OnModelCreating(modelBuilder);
     }
    
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FluentValidation;
 
 namespace CookBook.Models;
 
@@ -23,3 +24,4 @@ public enum Score
     Four,
     Five
 }
+

@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace CookBook.Models;
 
 public class Recipe
@@ -11,5 +13,17 @@ public class Recipe
     public int UserId { get; set; } 
     public User User { get; set; }
     public ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
-    public ICollection<Review> Revievs { get; set; }
+    public ICollection<Review> Reviews{ get; set; }
+    public Category Category { get; set; }
 }
+
+public enum Category
+{
+    soup = 1,
+    porridge,
+    salad,
+    dessert,
+    pizza,
+    pasta
+}
+

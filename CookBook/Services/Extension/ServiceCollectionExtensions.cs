@@ -1,4 +1,6 @@
 using CookBook.Composer;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 public static class ServiceCollectionExtensions
 {
@@ -12,6 +14,11 @@ public static class ServiceCollectionExtensions
             .AddInfrastructure(configuration)
             .AddSwagger()
             .AddApplicationServices()
-            .AddControllers();
+            .AddControllers()
+            .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.MaxDepth = 32;  
+        });
     }
 }

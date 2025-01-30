@@ -3,6 +3,7 @@ using CookBook.Abstractions;
 using CookBook.Contracts;
 using CookBook.Database;
 using CookBook.Exceptions;
+using CookBook.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CookBook.Services;
@@ -26,8 +27,20 @@ public class RecipesRepository : IRecipeRepository
 
         return listOfRecipes;
     }
-    
-    public async Task<Models.Recipe> AddRecipe(CreateRecipeDto dto, int userId)
+
+    public async Task<List<RecipeVm>> GetRecipesByCategory(Category category)
+    {
+        var token = new CancellationTokenSource(5000).Token;
+        
+        var listOfRecipes = await _dbContext.Recipes
+            .Where(recipe => recipe.Category == category)
+            .Select(recipe => new RecipeVm(recipe.Id, recipe.Name, recipe.Description))
+            .ToListAsync(token);
+        
+        return listOfRecipes;
+    }
+
+    public async Task<RecipeVm> AddRecipe(CreateRecipeDto dto, int userId, Category category)
     {
         var token = new CancellationTokenSource(5000).Token;
         
@@ -35,12 +48,13 @@ public class RecipesRepository : IRecipeRepository
         recipe.UserId = userId;
         recipe.DateCreated = DateTime.UtcNow;
         recipe.Finished = false;
+        recipe.Category = category;
         await _dbContext.Recipes.AddAsync(recipe, token);
         await _dbContext.SaveChangesAsync(token);
-        return recipe;
+        return new RecipeVm(recipe.Id, recipe.Name, recipe.Description);
     }
 
-    public async Task<int> UpdateRecipe(int id, UpdateRecipeDto dto)
+    public async Task<int> UpdateRecipe(int id, UpdateRecipeDto dto, Category category)
     {
         var token = new CancellationTokenSource(5000).Token;
         
@@ -50,6 +64,7 @@ public class RecipesRepository : IRecipeRepository
         recipe.Description = updatedRecipe.Description;
         recipe.Finished = true;
         recipe.EditDate = DateTime.UtcNow;
+        recipe.Category = category;
         foreach (var ingredientDto in dto.Ingredients)
         {
             await UpdateRecipeIngredient(ingredientDto.IngredientId, id, ingredientDto);

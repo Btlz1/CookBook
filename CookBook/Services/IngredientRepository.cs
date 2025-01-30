@@ -28,14 +28,15 @@ public class IngredientRepository : IIngredientPepository
         return ingredientsList;
     }
 
-    public async Task<List<Ingredient>> GetAllIngredients()
+    public async Task<List<IngredientRC>> GetAllIngredients()
     {
         var token = new CancellationTokenSource(5000).Token;
 
         var listOfIngredients = await _dbContext.Ingredients
             .ToListAsync(token);
+        var listOfIngredientsRc = _mapper.Map<List<IngredientRC>>(listOfIngredients);
 
-        return listOfIngredients;
+        return listOfIngredientsRc;
     }
     
     public async Task<Ingredient> AddIngredient(IngredientRC dto)

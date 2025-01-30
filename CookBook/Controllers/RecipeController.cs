@@ -21,15 +21,19 @@ public class RecipeController : BaseController
     [Authorize(Policy = "RecipeOwner")]
     public async Task<ActionResult<Recipe>> GetRecipes(int userId)
         => Ok(await _recipeRepository.GetRecipes(userId));
+    
+    [HttpGet("GetRecipesByCategory")]
+    public async Task<ActionResult<Recipe>> GetRecipesByCategory(Category category)
+        => Ok(await _recipeRepository.GetRecipesByCategory(category));
 
     [HttpPost]
-    public async Task<ActionResult<RecipeVm>> AddRecipe(CreateRecipeDto dto, int userId)
-        => Ok(await _recipeRepository.AddRecipe(dto, userId));
+    public async Task<ActionResult<RecipeVm>> AddRecipe(CreateRecipeDto dto, int userId, Category category)
+        => Ok(await _recipeRepository.AddRecipe(dto, userId, category));
     
     [HttpPut("{id}")]
     [Authorize(Policy = "RecipeOwner")]
-    public async Task<ActionResult<int>> UpdateRecipe(int userId, int id, UpdateRecipeDto dto)
-        => Ok(await _recipeRepository.UpdateRecipe(id, dto));
+    public async Task<ActionResult<int>> UpdateRecipe(int userId, int id, UpdateRecipeDto dto, Category category)
+        => Ok(await _recipeRepository.UpdateRecipe(id, dto, category));
     
     [HttpDelete("{id}")]
     [Authorize(Policy = "RecipeOwner")]
